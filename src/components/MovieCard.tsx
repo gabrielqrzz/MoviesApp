@@ -1,5 +1,6 @@
 import React from "react";
 import { TouchableOpacity, View, Text, Image, StyleSheet } from "react-native";
+import { useTheme } from "../context/themeContext";
 
 const IMG_URL = "https://image.tmdb.org/t/p/w500";
 
@@ -18,14 +19,16 @@ export default function MovieCard({
   vote_average,
   onPress,
 }: MovieCardProps) {
+  const { theme } = useTheme();
+
   return (
     <TouchableOpacity onPress={() => onPress(id)}>
-      <View style={styles.card}>
+      <View style={[styles.card, { backgroundColor: theme.background === '#FFFFFF' ? '#f5f5f5' : '#222' }]}>
         <Image source={{ uri: IMG_URL + poster_path }} style={styles.poster} />
         <View style={styles.info}>
-          <Text style={styles.name}>{title}</Text>
+          <Text style={[styles.name, { color: theme.text }]}>{title}</Text>
           {vote_average !== undefined && (
-            <Text style={styles.vote}>⭐ {vote_average}</Text>
+            <Text style={[styles.vote, { color: theme.primary }]}>⭐ {vote_average}</Text>
           )}
         </View>
       </View>
@@ -37,12 +40,11 @@ const styles = StyleSheet.create({
   card: {
     flexDirection: "row",
     marginBottom: 15,
-    backgroundColor: "#222",
     borderRadius: 10,
     overflow: "hidden",
   },
   poster: { width: 100, height: 150 },
   info: { flex: 1, padding: 10, justifyContent: "center" },
-  name: { fontSize: 16, fontWeight: "bold", color: "#fff" },
-  vote: { color: "#ffcc00", marginTop: 5 },
+  name: { fontSize: 16, fontWeight: "bold" },
+  vote: { marginTop: 5 },
 });

@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { View, FlatList, Button, StyleSheet } from "react-native";
+import { View, FlatList, Button, StyleSheet, Text } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../App";
 import MovieCard from "../components/MovieCard";
 import Header from "../components/Header";
+import { useTheme } from "../context/themeContext";
 
 const API_KEY = "e7cdc1cdf73400b8976fc178ca5491ea";
 const BASE_URL = "https://api.themoviedb.org/3";
@@ -20,6 +21,7 @@ type NavigationProp = NativeStackNavigationProp<RootStackParamList, "Popular">;
 export default function PopularScreen() {
   const [movies, setMovies] = useState<Movie[]>([]);
   const navigation = useNavigation<NavigationProp>();
+  const { theme } = useTheme();
 
   useEffect(() => {
     fetch(`${BASE_URL}/movie/popular?api_key=${API_KEY}&language=pt-BR&page=1`)
@@ -29,10 +31,13 @@ export default function PopularScreen() {
   }, []);
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: theme.background }]}>
+
       <Header title="🎬 Filmes Populares" />
+
       <Button
         title="🔍 Buscar Filmes"
+        color={theme.primary}
         onPress={() => navigation.navigate("Search")}
       />
       <FlatList
@@ -53,5 +58,5 @@ export default function PopularScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20, backgroundColor: "#111" },
+  container: { flex: 1, padding: 20 },
 });
