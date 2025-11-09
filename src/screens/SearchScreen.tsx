@@ -6,6 +6,7 @@ import { RootStackParamList } from "../../App";
 import SearchBar from "../components/SearchBar";
 import MovieCard from "../components/MovieCard";
 import Header from "../components/Header";
+import { useTheme } from "../context/themeContext";
 
 const API_KEY = "e7cdc1cdf73400b8976fc178ca5491ea";
 const BASE_URL = "https://api.themoviedb.org/3";
@@ -17,6 +18,7 @@ export default function SearchScreen() {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<Movie[]>([]);
   const navigation = useNavigation<NavigationProp>();
+  const { theme } = useTheme();
 
   const searchMovies = () => {
     fetch(
@@ -28,14 +30,18 @@ export default function SearchScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: theme.background }]}>
       <Header title="🔍 Buscar Filmes" />
       <SearchBar
         value={query}
         onChangeText={setQuery}
         onSubmit={searchMovies}
       />
-      <Button title="Voltar" onPress={() => navigation.navigate("Popular")} />
+      <Button
+        title="Voltar"
+        color={theme.primary}
+        onPress={() => navigation.navigate("Popular")}
+      />
       <FlatList
         data={results}
         keyExtractor={(item) => item.id.toString()}
@@ -53,5 +59,5 @@ export default function SearchScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20, backgroundColor: "#111" },
+  container: { flex: 1, padding: 20 },
 });

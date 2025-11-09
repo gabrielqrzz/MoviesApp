@@ -1,5 +1,6 @@
 import React from "react";
 import { View, TextInput, StyleSheet } from "react-native";
+import { useTheme } from "../context/themeContext";
 
 type SearchBarProps = {
   value: string;
@@ -12,12 +13,17 @@ export default function SearchBar({
   onChangeText,
   onSubmit,
 }: SearchBarProps) {
+  const { theme } = useTheme();
+
   return (
     <View style={styles.container}>
       <TextInput
-        style={styles.input}
+        style={[styles.input, {
+          backgroundColor: theme.background === '#FFFFFF' ? '#f5f5f5' : '#222',
+          color: theme.text
+        }]}
         placeholder="Digite o nome do filme..."
-        placeholderTextColor="#888"
+        placeholderTextColor={theme.background === '#FFFFFF' ? '#666' : '#888'}
         value={value}
         onChangeText={onChangeText}
         onSubmitEditing={onSubmit}
@@ -29,9 +35,7 @@ export default function SearchBar({
 const styles = StyleSheet.create({
   container: { marginBottom: 20 },
   input: {
-    backgroundColor: "#222",
     padding: 10,
     borderRadius: 8,
-    color: "#fff",
   },
 });
